@@ -1,19 +1,18 @@
-'use client';
+import { notFound } from 'next/navigation';
+import { getNewsItem } from '@/lib/news';
+import Backdrop from '@/components/backdrop';
 
-import { DUMMY_NEWS } from '@/dummy-news';
-import { notFound, useRouter } from 'next/navigation';
-
-export default function Page({ params }) {
+export default async function Page({ params }) {
   const { newsSlug } = params;
-  const router = useRouter();
-  const newsItem = DUMMY_NEWS.find(item => item.slug === newsSlug);
+
+  const newsItem = await getNewsItem(newsSlug);
 
   if (!newsItem) {
     notFound();
   }
   return (
     <>
-      <div className="modal-backdrop" onClick={router.back}></div>
+      <Backdrop />
       <dialog className="modal" open>
         <img src={`/images/news/${newsItem.image}`} alt={newsItem.title} />
       </dialog>
